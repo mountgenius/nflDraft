@@ -11,24 +11,30 @@ namespace nfl_draft_project
 		public static int welcomeOptions()
 		{
 			Console.WriteLine("Welcome to the draft picker!!!\nYou may pick up to 5 players to draft, up to $95 million");
-			Console.WriteLine("1. Quarterbacks\n 2. Running Backs\n 3.Wide Receivers\n4. Defensive Linemen\n5. Defensive-Backs");
+			Console.WriteLine("1. Quarterbacks\n2. Running Backs\n3. Wide Receivers\n4. Defensive Linemen\n5. Defensive-Backs");
 			Console.WriteLine("6. Tight Ends\n7. Line-Backer's\n8. Offensive Tackles\n\nPlease enter the number corresponding to position...");
 			string selectionString = Console.ReadLine();
 			int selectionInt = Int32.Parse(selectionString);
 			return selectionInt;
 		}
-
+		public static int drafting()
+		{
+			Console.WriteLine("Which player (number 1-5) would you like to draft?");
+			string rawUserInput = Console.ReadLine();
+			int userInput= Int32.Parse(rawUserInput);
+			return userInput;
+		}
 		static void Main(string[] args)
 		{
 			string[,] players =
 			{
 			{ "Mason Rudolph", "Lamar Jackson", "Josh Rosen", "Sam Darnold", "Baker Mayfield" },
 			{ "Saquon Barkley","Derrius Guice", "Bryce Love","Ronald Jones 11","Damien Harris" },
-			 { "Courtland Sutton","James Washington","Marcell Ateman","Anthony Miller","Calvin Ridley" },
+			{ "Courtland Sutton","James Washington","Marcell Ateman","Anthony Miller","Calvin Ridley" },
 			{ "Maurice Hurst","Vita Vea","Taven Bryan","Da'Ron Payne","Harrison Phillips" },
 			{ "Joshua Jackson","Derwin James","Denzal Ward","Minkah Fitzpatrick","Isiah Oliver" },
-			 { "Mark Andrews","Dallas Goedert","Jaylen Samuels","Mike Gesicki","Troy Fumagalli" },
-			 { "Roquan Smith","Tremaine Edmundo","Kendall Joseph","Dorian O'Daniel","Malik Jefferson" },
+			{ "Mark Andrews","Dallas Goedert","Jaylen Samuels","Mike Gesicki","Troy Fumagalli" },
+			{ "Roquan Smith","Tremaine Edmundo","Kendall Joseph","Dorian O'Daniel","Malik Jefferson" },
 			{ "Orlando Brown","Kolton Miller","Chukwuma Okorafor","Connor Williams","Mike McGlinchey"}
 			};
 			string[,] school =
@@ -53,8 +59,15 @@ namespace nfl_draft_project
 			{ 22900300, 19000590, 18000222, 12999999, 10000000 },
 			{ 23000000, 20000000, 19400000, 16200700, 15900000 }
 			};
-			int selection = welcomeOptions();
-			Console.WriteLine(selection.ToString());
+			int selectionInt = welcomeOptions();
+			for (var x = 0; x < players.GetLength(1); x++)
+			{
+				Console.WriteLine($"{x+1}) {players[selectionInt-1, x]}");
+			}
+			int userInput = drafting();
+			Console.WriteLine(players[selectionInt - 1, userInput - 1]);
+			Console.WriteLine(school[selectionInt - 1, userInput - 1]);
+			Console.WriteLine(salary[selectionInt - 1, userInput - 1]);
 
 		}
 	}
