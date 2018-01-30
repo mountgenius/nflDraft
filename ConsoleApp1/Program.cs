@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace nfl_draft_project
 {
+	class Player
+	{
+		public string player { get; set; }
+		public int pay { get; set; }
+		public string college { get; set; }
+
+	}
 	class Program
 	{
 		public static int welcomeOptions()
@@ -60,6 +67,7 @@ namespace nfl_draft_project
 			{ 23000000, 20000000, 19400000, 16200700, 15900000 }
 			};
 			int selectionInt = welcomeOptions();
+			List<Player>draftedPlayers= new List<Player>();
 			for (var x = 0; x < players.GetLength(1); x++)
 			{
 				Console.WriteLine($"{x+1}) {players[selectionInt-1, x]}");
@@ -68,7 +76,16 @@ namespace nfl_draft_project
 			Console.WriteLine(players[selectionInt - 1, userInput - 1]);
 			Console.WriteLine(school[selectionInt - 1, userInput - 1]);
 			Console.WriteLine(salary[selectionInt - 1, userInput - 1]);
-
+			Console.WriteLine("\nConfirm choice? (Y/N)");
+			string y=Console.ReadLine().ToUpper();
+			if (y == "Y")
+			{
+				Player selectedPlayer = new Player();
+				selectedPlayer.player = players[selectionInt - 1, userInput - 1];
+				selectedPlayer.college = school[selectionInt - 1, userInput - 1];
+				selectedPlayer.pay = salary[selectionInt - 1, userInput - 1];
+				draftedPlayers.Add(selectedPlayer);
+			}
 		}
 	}
 }
