@@ -15,10 +15,13 @@ namespace nfl_draft_project
 	}
 	class Program
 	{
-		public static int welcomeOptions()
+		public static void welcomeOptions()
 		{
 			Console.WriteLine("Welcome to the draft picker!!!\nYou may pick up to 5 players to draft, up to $95 million");
-			Console.WriteLine("1. Quarterbacks\n2. Running Backs\n3. Wide Receivers\n4. Defensive Linemen\n5. Defensive-Backs");
+		}
+		public static int positionSelection()
+		{
+			Console.WriteLine("\n1. Quarterbacks\n2. Running Backs\n3. Wide Receivers\n4. Defensive Linemen\n5. Defensive-Backs");
 			Console.WriteLine("6. Tight Ends\n7. Line-Backer's\n8. Offensive Tackles\n\nPlease enter the number corresponding to position...");
 			string selectionString = Console.ReadLine();
 			int selectionInt = Int32.Parse(selectionString);
@@ -66,25 +69,52 @@ namespace nfl_draft_project
 			{ 22900300, 19000590, 18000222, 12999999, 10000000 },
 			{ 23000000, 20000000, 19400000, 16200700, 15900000 }
 			};
-			int selectionInt = welcomeOptions();
-			List<Player>draftedPlayers= new List<Player>();
-			for (var x = 0; x < players.GetLength(1); x++)
+			welcomeOptions();
+			int z = 0;
+			List<Player> draftedPlayers = new List<Player>();
+			while (z < 6)
 			{
-				Console.WriteLine($"{x+1}) {players[selectionInt-1, x]}");
-			}
-			int userInput = drafting();
-			Console.WriteLine(players[selectionInt - 1, userInput - 1]);
-			Console.WriteLine(school[selectionInt - 1, userInput - 1]);
-			Console.WriteLine(salary[selectionInt - 1, userInput - 1]);
-			Console.WriteLine("\nConfirm choice? (Y/N)");
-			string y=Console.ReadLine().ToUpper();
-			if (y == "Y")
-			{
-				Player selectedPlayer = new Player();
-				selectedPlayer.player = players[selectionInt - 1, userInput - 1];
-				selectedPlayer.college = school[selectionInt - 1, userInput - 1];
-				selectedPlayer.pay = salary[selectionInt - 1, userInput - 1];
-				draftedPlayers.Add(selectedPlayer);
+				int selectionInt = positionSelection();
+				
+				for (var x = 0; x < players.GetLength(1); x++)
+				{
+					Console.WriteLine($"{x + 1}) {players[selectionInt - 1, x]}");
+				}
+				int userInput = drafting();
+
+				Console.WriteLine(players[selectionInt - 1, userInput - 1]);
+				Console.WriteLine(school[selectionInt - 1, userInput - 1]);
+				Console.WriteLine(salary[selectionInt - 1, userInput - 1]);
+
+				Console.WriteLine("\nConfirm choice? (Y/N)");
+				string y = Console.ReadLine().ToUpper();
+				if (y == "Y")
+				{
+					Player selectedPlayer = new Player();
+					selectedPlayer.player = players[selectionInt - 1, userInput - 1];
+					selectedPlayer.college = school[selectionInt - 1, userInput - 1];
+					selectedPlayer.pay = salary[selectionInt - 1, userInput - 1];
+					draftedPlayers.Add(selectedPlayer);
+				}
+				Console.WriteLine("would you like to draft another player? (Y/N)");
+				y = Console.ReadLine().ToUpper();
+				if (y == "N")
+				{
+					Console.Clear();
+					z = 6;
+				}
+				if (y == "Y")
+				{
+					Console.Clear();
+					z++;
+				}
+
+				int totalPay = 0;
+				foreach (var i in draftedPlayers)
+				{
+					totalPay = totalPay + i.pay;
+				}
+				Console.WriteLine("Your Total salary commitment is {0}.", totalPay);
 			}
 		}
 	}
