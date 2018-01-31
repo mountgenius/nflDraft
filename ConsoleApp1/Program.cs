@@ -11,6 +11,7 @@ namespace nfl_draft_project
 		public string player { get; set; }
 		public int pay { get; set; }
 		public string college { get; set; }
+		public string position { get; set; }
 
 	}
 	class Program
@@ -24,14 +25,16 @@ namespace nfl_draft_project
 			Console.WriteLine("\n1. Quarterbacks\n2. Running Backs\n3. Wide Receivers\n4. Defensive Linemen\n5. Defensive-Backs");
 			Console.WriteLine("6. Tight Ends\n7. Line-Backer's\n8. Offensive Tackles\n\nPlease enter the number corresponding to position...");
 			string selectionString = Console.ReadLine();
+			Console.Clear();
 			int selectionInt = Int32.Parse(selectionString);
 			return selectionInt;
 		}
 		public static int drafting()
 		{
-			Console.WriteLine("Which player (number 1-5) would you like to draft?");
+			Console.WriteLine("\nWhich player (number 1-5) would you like to draft?");
 			string rawUserInput = Console.ReadLine();
 			int userInput= Int32.Parse(rawUserInput);
+			Console.Clear();
 			return userInput;
 		}
 		static void Main(string[] args)
@@ -58,6 +61,17 @@ namespace nfl_draft_project
 			{ "Georgia","Virgina Tech","Clemson","CLemson","Texas" },
 			{ "Oklahoma","UCLA","Western Michigan","Texas","Notre Dame" }
 			};
+			string[,] positions =
+			{
+			{ "Quarterback","Quarterback","Quarterback","Quarterback","Quarterback" },
+			{ "Running Back","Running Back","Running Back","Running Back","Running Back" },
+			{ "Wide-Reciever","Wide-Reciever","Wide-Reciever","Wide-Reciever","Wide-Reciever" },
+			{ "Defensive Lineman","Defensive Lineman","Defensive Lineman","Defensive Lineman","Defensive Lineman" },
+			{ "Defensive-Back","Defensive-Back","Defensive-Back","Defensive-Back","Defensive-Back" },
+			{ "Tight End","Tight End","Tight End","Tight End","Tight End" },
+			{ "Line-Backer","Line-Backer","Line-Backer","Line-Backer","Line-Backer" },
+			{ "Offensive Tackle","Offensive Tackle","Offensive Tackle","Offensive Tackle","Offensive Tackle" }
+			};
 			int[,] salary =
 			{
 			{ 26400100, 20300100, 17420300, 13100145, 10300000 },
@@ -71,17 +85,22 @@ namespace nfl_draft_project
 			};
 			welcomeOptions();
 			int z = 0;
+			int q = 0;
+			int totalPay = 0;
 			List<Player> draftedPlayers = new List<Player>();
-			while (z < 6)
+			int remaining = 95000000;
+			while (z < 5)
 			{
 				int selectionInt = positionSelection();
-				
+
 				for (var x = 0; x < players.GetLength(1); x++)
 				{
-					Console.WriteLine($"{x + 1}) {players[selectionInt - 1, x]}");
+					Console.WriteLine($"{x + 1}  {players[selectionInt - 1, x]}  " +
+						$"{salary[selectionInt - 1, x]}  {school[selectionInt - 1, x]} "); //add salary, school
 				}
 				int userInput = drafting();
-
+				Console.WriteLine("You have ${0} remaining\n", remaining);
+				Console.WriteLine(positions[selectionInt - 1, userInput - 1]);
 				Console.WriteLine(players[selectionInt - 1, userInput - 1]);
 				Console.WriteLine(school[selectionInt - 1, userInput - 1]);
 				Console.WriteLine(salary[selectionInt - 1, userInput - 1]);
@@ -92,29 +111,50 @@ namespace nfl_draft_project
 				{
 					Player selectedPlayer = new Player();
 					selectedPlayer.player = players[selectionInt - 1, userInput - 1];
+					selectedPlayer.position = positions[selectionInt - 1, userInput - 1];
 					selectedPlayer.college = school[selectionInt - 1, userInput - 1];
 					selectedPlayer.pay = salary[selectionInt - 1, userInput - 1];
 					draftedPlayers.Add(selectedPlayer);
+					remaining = remaining - (selectedPlayer.pay = salary[selectionInt - 1, userInput - 1]);
+					totalPay=totalPay + (selectedPlayer.pay = salary[selectionInt - 1, userInput - 1]);
+					if (userInput < 4)
+					{
+						q = q + 1;
+					}
 				}
-				Console.WriteLine("would you like to draft another player? (Y/N)");
-				y = Console.ReadLine().ToUpper();
 				if (y == "N")
 				{
-					Console.Clear();
-					z = 6;
+					z = z - 1;
 				}
-				if (y == "Y")
+				if (z != 4)
 				{
-					Console.Clear();
-					z++;
+					Console.WriteLine("would you like to draft another player? (Y/N)");
+					y = Console.ReadLine().ToUpper();
+					if (y == "N")
+					{
+						Console.Clear();
+						z = 5;
+					}
+					if (y == "Y")
+					{
+						Console.Clear();
+						z++;
+					}
 				}
-
-				int totalPay = 0;
+				int budget = 95000000;
 				foreach (var i in draftedPlayers)
 				{
-					totalPay = totalPay + i.pay;
+					Console.WriteLine(i.player + " , " + i.position + " , " + i.college + " , " + i.pay );
 				}
-				Console.WriteLine("Your Total salary commitment is {0}.", totalPay);
+				Console.WriteLine("Your Total salary commitment is ${0}.", totalPay);
+				Console.WriteLine("You have $" + (budget - totalPay) + " remaining.");
+			}
+			if (q >= 3)
+			{
+				if (totalPay <= 65000000)
+				{
+					Console.WriteLine("Cost Effective");
+				}
 			}
 		}
 	}
